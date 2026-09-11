@@ -15,6 +15,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .logo{font-size:20px;font-weight:600;letter-spacing:0.18em;color:#1A1A2E;}
 .tagline{font-size:10px;color:#999;font-style:italic;margin-top:3px;}
 .date-pill{background:#fff;border-radius:20px;padding:5px 14px;font-size:12px;color:#666;border:0.5px solid #E0DDD6;}
+.sync{font-size:10px;color:#BBB;margin-top:4px;height:12px;}
+.sync.ok{color:#5C9A7C;}
+.sync.err{color:#C4694A;}
 .tab-row{display:flex;gap:8px;margin-bottom:1.5rem;}
 .tab{flex:1;padding:10px 0;border-radius:24px;border:0.5px solid #D0CEC8;background:#fff;cursor:pointer;font-size:13px;color:#666;transition:all 0.2s;text-align:center;font-family:inherit;}
 .tab.active{background:#B7754A;border-color:#B7754A;color:#fff;font-weight:500;}
@@ -112,7 +115,7 @@ input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;bac
 <div class="app">
   <div class="header">
     <div><div class="logo">INGRID</div><div class="tagline">You're not running. You're finding your way back.</div></div>
-    <div class="date-pill" id="dpill"></div>
+    <div style="text-align:right"><div class="date-pill" id="dpill"></div><div class="sync" id="sync">&nbsp;</div></div>
   </div>
   <div class="tab-row">
     <button class="tab active" onclick="showTab('usp',this)">Why this</button>
@@ -254,7 +257,7 @@ input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;bac
 document.getElementById('dpill').textContent=new Date().toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short'});
 document.getElementById('hToday').textContent=new Date().toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short'});
 
-window.addEventListener('DOMContentLoaded',updTodayCard);
+window.addEventListener('DOMContentLoaded',()=>{updTodayCard();syncFromServer();});
 
 document.querySelectorAll('input[type=range]').forEach(r=>{
   r.style.setProperty('--val',(r.value-1)/9*100+'%');
@@ -264,6 +267,10 @@ document.querySelectorAll('input[type=range]').forEach(r=>{
 function upd(el,nid){document.getElementById(nid).textContent=el.value;}
 
 const STORE='ingrid_daily_index_v1';
+const API='https://script.google.com/macros/s/AKfycbwrtke5h3jopf5-7MRt8SE2AwtCRoa_Zx5frbclj4P0Y7sPTzmRZde39xQK0FSy2iUzaA/exec';
+const DATE_RE=/^\d{4}-\d{2}-\d{2}$/;
+function setSync(msg,cls){const e=document.getElementById('sync');if(!e)return;e.textContent=msg||'\u00a0';e.className='sync'+(cls?' '+cls:'');}
+
 function loadHistory(){
   try{const raw=localStorage.getItem(STORE);return raw?JSON.parse(raw):[];}
   catch(e){console.warn('No se pudo leer el historial guardado',e);return[];}
@@ -346,6 +353,7 @@ function calc(){
   history.sort((a,b)=>a.date<b.date?-1:1);
   saveHistory();
   updTodayCard();
+  pushRemote(entry);
   goS(3);
 }
 
@@ -386,6 +394,45 @@ function clearData(){
   localStorage.removeItem(STORE);
   updTodayCard();
   renderChart();
+}
+
+async function syncFromServer(){
+  setSync('Syncing\u2026');
+  try{
+    const r=await fetch(API,{cache:'no-store'});
+    if(!r.ok)throw new Error('HTTP '+r.status);
+    const data=await r.json();
+    if(!Array.isArray(data))throw new Error('bad payload');
+    const clean=data.filter(d=>d&&DATE_RE.test(d.date)).map(d=>({
+      date:d.date,
+      ihi:Number(d.ihi),idi:Number(d.idi),overall:Number(d.overall),
+      values:(d.values||[]).map(Number)
+    }));
+    const byDate={};
+    clean.forEach(d=>byDate[d.date]=d);
+    history.forEach(d=>{if(!byDate[d.date])byDate[d.date]=d;});
+    history=Object.values(byDate).sort((a,b)=>a.date<b.date?-1:1);
+    saveHistory();
+    updTodayCard();
+    if(document.getElementById('tab-hist').classList.contains('active'))renderChart();
+    setSync('Synced','ok');
+  }catch(e){
+    console.warn('Sync failed',e);
+    setSync('Offline \u2014 saved on this device','err');
+  }
+}
+
+async function pushRemote(entry){
+  setSync('Saving\u2026');
+  try{
+    const r=await fetch(API,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(entry)});
+    const j=await r.json();
+    if(!j||!j.ok)throw new Error('rejected');
+    setSync('Saved to your sheet','ok');
+  }catch(e){
+    console.warn('Push failed',e);
+    setSync('Not saved to sheet \u2014 retry later','err');
+  }
 }
 
 let chartInst=null;
