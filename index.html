@@ -248,6 +248,7 @@ input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;bac
       <div id="hlist"></div>
       <div class="insight" id="gettingStarted"><strong>Getting started:</strong> your first check-in becomes your baseline. From day two, this page will show how your Happiness and Development scores move together — and what that tells you.</div>
       <div style="text-align:center;margin-top:1rem;">
+        <button class="btn" style="font-size:12px;" onclick="exportData()">Export data</button>
         <button class="btn" style="font-size:12px;" onclick="lock()">Lock app</button>
       </div>
     </div>
@@ -369,6 +370,16 @@ function lock(){
   safeDel(KEYSTORE);
   key='';
   showGate('Locked. Your saved check-ins stay in your sheet.');
+}
+function exportData(){
+  const blob=new Blob([JSON.stringify(history,null,2)],{type:'application/json'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='ingrid-daily-index-'+todayStr()+'.json';
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(()=>URL.revokeObjectURL(a.href),1000);
 }
 
 /* ---------- API ---------- */
