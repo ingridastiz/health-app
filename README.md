@@ -5,7 +5,7 @@ A personal morning check-in. Eight sliders from 1 to 10 turn into two indexes an
 - **Balance Index (BI), how was yesterday:** Real connection, Sustainable effort, Joy, Movement.
 - **Rise Index (RI), how I feel about today:** Body energy, Self-acceptance, Health routine, Enthusiasm.
 - **Overall:** average of BI and RI.
-- **Phase:** each day is labeled Steady, Bored, Overdrive, Drained, Stopped or Mixed, from Sustainable effort, Body energy and Enthusiasm. Each day in the Journey tab shows its phase, so the cycle between boredom, overdrive and exhaustion becomes visible.
+- **Phase:** each day is labeled Steady, Bored, Overdrive, Drained, Stopped or Mixed, from Sustainable effort, Body energy and Enthusiasm. The phase picks the coach message on the result screen, including a warning when a bored day has led to overdrive before. In the Journey tab, tapping a day shows its scores.
 
 Everything is one file, `index.html`, with no build step. The only external dependency is Chart.js from cdnjs. Check-ins are kept in the browser's `localStorage` and synced to a Google Sheet through a small Google Apps Script backend (`apps-script/Code.gs`), protected by a passphrase.
 

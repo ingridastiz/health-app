@@ -116,7 +116,6 @@ input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;bac
 .usp-hero{background:#17203A;border-radius:20px;padding:2rem 1.5rem;text-align:center;margin-bottom:1rem;}
 .usp-top{font-size:11px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:#9EC5F0;margin-bottom:1rem;}
 .usp-main{font-size:21px;font-weight:600;color:#fff;line-height:1.5;margin-bottom:1rem;}
-.usp-sub{font-size:14px;color:#C2CEE4;line-height:1.6;}
 .usp-hook{background:#FBE9F0;border-radius:16px;padding:16px 18px;text-align:center;}
 .usp-hook-text{font-size:15px;font-weight:500;color:#A03A68;line-height:1.5;margin-bottom:8px;}
 .usp-hook-sub{font-size:12px;color:#B04A77;}
@@ -235,7 +234,7 @@ input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;bac
       <div class="hdetail" id="hdToday" hidden></div>
       <div id="hsec" class="hsec" hidden>Previous days</div>
       <div id="hlist"></div>
-      <div class="insight" id="gettingStarted"><strong>Getting started:</strong> your first check-in becomes your baseline. From day two, this page shows how your Balance and Rise scores move, and the phase of each day in your rhythm.</div>
+      <div class="insight" id="gettingStarted"><strong>Getting started:</strong> your first check-in becomes your baseline. From day two, this page shows how your Balance and Rise scores move. Tap a day to see its details.</div>
     </div>
   </div>
 
@@ -245,7 +244,6 @@ input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;bac
       <div class="usp-hero">
         <div class="usp-top">A question worth asking daily</div>
         <div class="usp-main">"How did I live yesterday —<br>and how am I rising into today?"</div>
-        <div class="usp-sub">Two different questions. Most days we only answer one, or neither. INGRID asks both, every morning, in two minutes, so the pattern between them becomes visible instead of invisible.</div>
       </div>
 
       <div class="usp-hook">
@@ -274,8 +272,6 @@ const IDS=['y1','y2','y3','y4','r1','r2','r3','r4'];
 const LBS=['Real connection','Sustainable effort','Joy','Movement','Body energy','Self-acceptance','Health routine','Enthusiasm'];
 const IX={effort:1,energy:4,enthusiasm:7};
 const LOW=4,OK=6;
-const PHASES=[['Steady','#2E8F7A'],['Bored','#AEB6C6'],['Overdrive','#D2553F'],['Drained','#7B5EA7'],['Stopped','#5B6579'],['Mixed','#E3C27A']];
-const PCOL={};PHASES.forEach(p=>{PCOL[p[0]]=p[1];});
 
 function safeGet(k){try{return localStorage.getItem(k);}catch(e){return null;}}
 function safeSet(k,v){try{localStorage.setItem(k,v);return true;}catch(e){return false;}}
@@ -484,7 +480,7 @@ function calc(){
   else if(overall>=5.5)hl="Go gently today. Quality over quantity.";
   else hl="Be extra kind to yourself today. Listen to what you need.";
   document.getElementById('rhl').textContent=hl;
-  document.getElementById('rdetail').innerHTML=detailHtml(history,idx);
+  document.getElementById('rdetail').innerHTML=detailHtml(history,idx,true);
 
   renderJourney();
   pushRemote(entry);
@@ -492,7 +488,7 @@ function calc(){
 }
 
 // Detalle de un dia: BI/RI, mensajes del coach y barras. Se usa en Result y en Journey.
-function detailHtml(list,idx){
+function detailHtml(list,idx,withCoach){
   const h=list[idx];
   const v=(h.values||[]).map(Number);
   const phase=phaseAt(list,idx);
@@ -530,7 +526,7 @@ function detailHtml(list,idx){
   const bars=v.map((val,j)=>{
     return'<div class="br"><div class="bl">'+LBS[j]+'</div><div class="bt"><div class="bf" style="width:'+(val*10)+'%;background:'+grpColor(j)+'"></div></div><div class="bn">'+val+'</div></div>';
   }).join('');
-  return scores+'<div class="coaches">'+coach+'</div><div class="bars">'+bars+'</div>';
+  return scores+(withCoach?'<div class="coaches">'+coach+'</div>':'')+'<div class="bars">'+bars+'</div>';
 }
 
 // Abre o cierra el detalle de un dia en Journey. i<0 significa hoy.
@@ -554,11 +550,8 @@ function reset(){
   goS(1);
 }
 
-function phaseTag(p){return '<span style="color:'+PCOL[p]+';font-weight:600">'+p+'</span>';}
-
 function renderJourney(){
   const today=todayStr();
-  const ph=history.map((_,i)=>phaseAt(history,i));
   const ti=history.findIndex(x=>x.date===today);
   const h=ti>=0?history[ti]:null;
   const cells=document.querySelectorAll('.hcard.today .hs-v');
@@ -573,7 +566,7 @@ function renderJourney(){
   if(tr)tr.textContent=(h&&prev)?((h.overall-prev.overall>=0?'+':'')+(h.overall-prev.overall).toFixed(1)):'—';
   document.getElementById('hdToday').hidden=true;
   const tag=document.querySelector('.hcard.today .htag');
-  if(tag)tag.innerHTML=h?('Day '+(ti+1)+' · '+phaseTag(ph[ti])):'Not checked in yet';
+  if(tag)tag.textContent=h?'':'Not checked in yet';
 
   const pastIdx=history.map((_,i)=>i).filter(i=>history[i].date!==today).reverse();
   document.getElementById('hsec').hidden=pastIdx.length===0;
@@ -583,7 +576,7 @@ function renderJourney(){
     const delta=bIdx!==undefined?(d.overall-history[bIdx].overall):null;
     const dtxt=delta===null?'—':((delta>=0?'+':'')+delta.toFixed(1));
     return'<div class="hcard" onclick="toggleDetail(\'hd'+i+'\','+i+')">'+
-      '<div class="hdate"><div class="hday">'+fmtDay(d.date)+'</div><div class="htag">Day '+(i+1)+' · '+phaseTag(ph[i])+'</div></div>'+
+      '<div class="hdate"><div class="hday">'+fmtDay(d.date)+'</div></div>'+
       '<div class="hscores">'+
         '<div class="hs"><div class="hs-v" style="color:#B04A77">'+d.bi.toFixed(1)+'</div><div class="hs-l">BI</div></div>'+
         '<div class="hs"><div class="hs-v" style="color:#24705F">'+d.ri.toFixed(1)+'</div><div class="hs-l">RI</div></div>'+
