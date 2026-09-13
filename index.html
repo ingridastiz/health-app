@@ -93,6 +93,9 @@ input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;bac
 .chartoff{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;font-size:12px;color:#98A1B3;background:#FAFBFD;border:0.5px solid #E6EAF2;border-radius:14px;padding:1rem;}
 [hidden]{display:none !important;}
 .legend{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:0.5rem;}
+.varpick{display:flex;align-items:center;gap:8px;margin:0 0 1rem;}
+.varpick label{font-size:12px;color:#98A1B3;}
+.varpick select{flex:1;padding:8px 10px;border-radius:10px;border:0.5px solid #D5DCE8;background:#fff;color:#17203A;font-size:13px;font-family:inherit;outline:none;}
 .li{display:flex;align-items:center;gap:6px;font-size:12px;color:#7A8398;}
 .ld{width:8px;height:8px;border-radius:50%;}
 .hcard{background:#FAFBFD;border-radius:14px;padding:14px;margin-bottom:10px;display:flex;align-items:center;gap:12px;border:0.5px solid #E6EAF2;}
@@ -218,14 +221,21 @@ input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;bac
   <div class="screen" id="tab-hist">
     <div class="card">
       <div class="chart-wrap"><canvas id="hc"></canvas><div class="chartoff" id="chartoff" hidden>Chart unavailable offline. Your numbers are listed below.</div></div>
-      <div class="legend">
-        <div class="li"><div class="ld" style="background:#3559B5"></div>Overall</div>
-        <div class="li"><div class="ld" style="background:#D2628F"></div>Happiness Index</div>
-        <div class="li"><div class="ld" style="background:#2E8F7A"></div>Development Index</div>
-      </div>
-      <div style="display:flex;gap:8px;margin:0 0 1rem;">
-        <button class="btn" style="flex:1;font-size:12px;" onclick="exportData()">Export data</button>
-        <button class="btn" style="flex:1;font-size:12px;" onclick="clearData()">Clear all</button>
+      <div class="legend" id="legend"></div>
+      <div class="varpick">
+        <label for="vsel">Show</label>
+        <select id="vsel" onchange="setChartVar(this.value)">
+          <option value="all">All three indexes</option>
+          <option value="0">Sleep &amp; recovery</option>
+          <option value="1">Body feeling</option>
+          <option value="2">Emotional baseline</option>
+          <option value="3">Presence with myself</option>
+          <option value="4">Clarity on direction</option>
+          <option value="5">Self-acceptance</option>
+          <option value="6">Structure &amp; rituals</option>
+          <option value="7">Growth</option>
+          <option value="8">Real connection</option>
+        </select>
       </div>
       <div class="hcard today">
         <div class="hdate"><div class="hday" id="hToday"></div><div class="htag">Day 1 · Baseline</div></div>
@@ -547,23 +557,20 @@ function renderJourney(){
   }).join('');
 
   document.getElementById('gettingStarted').hidden=history.length>0;
+  renderLegend();
   renderChart();
 }
 
-function exportData(){
-  const blob=new Blob([JSON.stringify(history,null,2)],{type:'application/json'});
-  const a=document.createElement('a');
-  a.href=URL.createObjectURL(blob);
-  a.download='ingrid-daily-index-'+todayStr()+'.json';
-  a.click();
-  URL.revokeObjectURL(a.href);
-}
+let chartVar='all';
+function setChartVar(v){chartVar=v;renderChart();renderLegend();}
 
-function clearData(){
-  if(!confirm('Delete the check-ins saved on this device? Your Google Sheet is not touched, and the next sync will bring them back.'))return;
-  history=[];
-  safeDel(STORE);
-  renderJourney();
+function renderLegend(){
+  const el=document.getElementById('legend');
+  if(!el)return;
+  const items=chartVar==='all'
+    ? [[C.overall,'Overall'],[C.ihi,'Happiness Index'],[C.idi,'Development Index']]
+    : [[(+chartVar<4?C.ihi:C.idi),LBS[+chartVar]]];
+  el.innerHTML=items.map(it=>'<div class="li"><div class="ld" style="background:'+it[0]+'"></div>'+it[1]+'</div>').join('');
 }
 
 let chartInst=null;
@@ -581,15 +588,23 @@ function renderChart(){
   if(chartInst)chartInst.destroy();
   const has=history.length>0;
   const labels=has?history.map(h=>new Date(h.date+'T00:00:00').toLocaleDateString('en-GB',{day:'numeric',month:'short'})):['Day 1'];
+  let datasets;
+  if(chartVar==='all'){
+    datasets=[
+      {label:'Overall',data:has?history.map(h=>h.overall):[null],borderColor:C.overall,backgroundColor:'rgba(53,89,181,0.08)',tension:0.4,pointRadius:5,pointBackgroundColor:C.overall,pointBorderColor:'#fff',pointBorderWidth:2,borderWidth:2,fill:true},
+      {label:'HI',data:has?history.map(h=>h.ihi):[null],borderColor:C.ihi,backgroundColor:'transparent',tension:0.4,pointRadius:4,pointBackgroundColor:C.ihi,pointBorderColor:'#fff',pointBorderWidth:2,borderWidth:2,borderDash:[5,3]},
+      {label:'DI',data:has?history.map(h=>h.idi):[null],borderColor:C.idi,backgroundColor:'transparent',tension:0.4,pointRadius:4,pointBackgroundColor:C.idi,pointBorderColor:'#fff',pointBorderWidth:2,borderWidth:2,borderDash:[2,3]}
+    ];
+  }else{
+    const ix=+chartVar;
+    const col=ix<4?C.ihi:C.idi;
+    datasets=[{label:LBS[ix],data:has?history.map(h=>{const n=Number((h.values||[])[ix]);return isFinite(n)&&n>0?n:null;}):[null],borderColor:col,backgroundColor:'transparent',tension:0.4,pointRadius:5,pointBackgroundColor:col,pointBorderColor:'#fff',pointBorderWidth:2,borderWidth:2,spanGaps:true}];
+  }
   chartInst=new Chart(cv.getContext('2d'),{
     type:'line',
     data:{
       labels:labels,
-      datasets:[
-        {label:'Overall',data:has?history.map(h=>h.overall):[null],borderColor:C.overall,backgroundColor:'rgba(53,89,181,0.08)',tension:0.4,pointRadius:5,pointBackgroundColor:C.overall,pointBorderColor:'#fff',pointBorderWidth:2,borderWidth:2,fill:true},
-        {label:'HI',data:has?history.map(h=>h.ihi):[null],borderColor:C.ihi,backgroundColor:'transparent',tension:0.4,pointRadius:4,pointBackgroundColor:C.ihi,pointBorderColor:'#fff',pointBorderWidth:2,borderWidth:2,borderDash:[5,3]},
-        {label:'DI',data:has?history.map(h=>h.idi):[null],borderColor:C.idi,backgroundColor:'transparent',tension:0.4,pointRadius:4,pointBackgroundColor:C.idi,pointBorderColor:'#fff',pointBorderWidth:2,borderWidth:2,borderDash:[2,3]}
-      ]
+      datasets:datasets
     },
     options:{
       responsive:true,maintainAspectRatio:false,
