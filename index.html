@@ -22,31 +22,33 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .screen{display:none;animation:fadeIn 0.3s ease;}
 .screen.active{display:block;}
 .prog-bar{height:3px;background:#E6EAF2;border-radius:2px;overflow:hidden;margin-bottom:6px;}
-.prog-fill{height:100%;background:#3559B5;border-radius:2px;transition:width 0.5s ease;}
+.prog-fill{height:100%;background:var(--accent,#3559B5);border-radius:2px;transition:width 0.5s ease;}
 .prog-steps{display:flex;justify-content:space-between;margin-bottom:1.5rem;}
 .ps{font-size:10px;color:#AEB6C6;}
-.ps.on{color:#3559B5;font-weight:600;}
+.ps.on{color:var(--accent,#3559B5);font-weight:600;}
 .badge{display:inline-block;padding:4px 14px;border-radius:20px;font-size:10px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;margin-bottom:10px;}
 .b-ihi{background:#FBE9F0;color:#B04A77;}
-.b-idi{background:#E8EEFA;color:#2F5AA8;}
+.b-idi{background:#E3F1ED;color:#24705F;}
 .stitle{font-size:19px;font-weight:600;color:#17203A;margin-bottom:4px;}
 .ssub{font-size:13px;color:#7A8398;margin-bottom:1.4rem;line-height:1.5;}
 .q{margin-bottom:1.1rem;}
 .ql{font-size:14px;font-weight:500;color:#17203A;margin-bottom:2px;}
 .qh{font-size:11px;color:#98A1B3;margin-bottom:8px;}
 .sr{display:flex;align-items:center;gap:12px;}
-input[type=range]{flex:1;-webkit-appearance:none;height:4px;border-radius:2px;background:linear-gradient(to right,#3559B5 var(--val,44%),#E6EAF2 var(--val,44%));outline:none;}
-input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;background:#3559B5;cursor:pointer;box-shadow:0 2px 6px rgba(53,89,181,0.4);}
-input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;background:#3559B5;cursor:pointer;border:none;}
-.snum{font-size:17px;font-weight:600;color:#3559B5;width:28px;text-align:center;}
+input[type=range]{flex:1;-webkit-appearance:none;height:4px;border-radius:2px;background:linear-gradient(to right,var(--accent,#3559B5) var(--val,44%),#E6EAF2 var(--val,44%));outline:none;}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;background:var(--accent,#3559B5);cursor:pointer;box-shadow:0 2px 6px rgba(23,32,58,0.25);}
+input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;background:var(--accent,#3559B5);cursor:pointer;border:none;}
+.snum{font-size:17px;font-weight:600;color:var(--accent,#3559B5);width:28px;text-align:center;}
 .nav{display:flex;justify-content:space-between;align-items:center;margin-top:1.5rem;}
 .btn{padding:11px 24px;border-radius:12px;border:0.5px solid #D5DCE8;background:#fff;cursor:pointer;font-size:14px;color:#5B6579;transition:all 0.15s;font-family:inherit;}
 .btn:active{background:#EDF1F8;}
-.btn-m{background:#3559B5;border-color:#3559B5;color:#fff;font-weight:500;}
-.btn-m:active{background:#27408C;}
+.btn-m{background:var(--accent,#3559B5);border-color:var(--accent,#3559B5);color:#fff;font-weight:500;}
+.btn-m:active{filter:brightness(0.88);}
+#s1{--accent:#B04A77;}
+#s2{--accent:#24705F;}
 .dots{display:flex;gap:6px;align-items:center;}
 .dot{width:6px;height:6px;border-radius:50%;background:#D5DCE8;transition:all 0.3s;}
-.dot.on{background:#3559B5;width:20px;border-radius:3px;}
+.dot.on{background:var(--accent,#3559B5);width:20px;border-radius:3px;}
 /* GATE */
 .gate{position:fixed;inset:0;background:#F5F7FB;display:flex;align-items:center;justify-content:center;padding:1.5rem;z-index:50;}
 .gate-card{background:#fff;border-radius:20px;padding:2rem 1.5rem;max-width:360px;width:100%;box-shadow:0 1px 4px rgba(23,32,58,0.07);text-align:center;}
@@ -93,9 +95,6 @@ input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;bac
 .legend{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:0.5rem;}
 .li{display:flex;align-items:center;gap:6px;font-size:12px;color:#7A8398;}
 .ld{width:8px;height:8px;border-radius:50%;}
-.keydef{background:#FAFBFD;border:0.5px solid #E6EAF2;border-radius:14px;padding:12px 14px;margin-bottom:1rem;}
-.keydef div{font-size:12px;color:#7A8398;line-height:1.6;}
-.keydef strong{color:#17203A;font-weight:600;}
 .hcard{background:#FAFBFD;border-radius:14px;padding:14px;margin-bottom:10px;display:flex;align-items:center;gap:12px;border:0.5px solid #E6EAF2;}
 .hcard.today{border-color:#3559B5;border-width:1.5px;background:#fff;}
 .hdate{width:86px;flex-shrink:0;}
@@ -158,7 +157,7 @@ input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;bac
       <div class="screen active" id="s1">
         <div class="prog-bar"><div class="prog-fill" style="width:33%"></div></div>
         <div class="prog-steps"><span class="ps on">Happiness</span><span class="ps">Development</span><span class="ps">Result</span></div>
-        <div class="badge b-ihi">IHI — Ingrid Happiness Index</div>
+        <div class="badge b-ihi">HI — Happiness Index</div>
         <div class="stitle">How are you right now?</div>
         <div class="ssub">Four dimensions · Scale 1–10 · Be honest with yourself</div>
         <div class="q"><div class="ql">Sleep &amp; recovery</div><div class="qh">How rested do you feel?</div><div class="sr"><input type="range" min="1" max="10" value="5" id="t1" oninput="upd(this,'n1')"><span class="snum" id="n1">5</span></div></div>
@@ -172,7 +171,7 @@ input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;bac
       <div class="screen" id="s2">
         <div class="prog-bar"><div class="prog-fill" style="width:66%"></div></div>
         <div class="prog-steps"><span class="ps">Happiness</span><span class="ps on">Development</span><span class="ps">Result</span></div>
-        <div class="badge b-idi">IDI — Ingrid Development Index</div>
+        <div class="badge b-idi">DI — Development Index</div>
         <div class="stitle">Where are you going?</div>
         <div class="ssub">Five dimensions · Scale 1–10 · Be honest with yourself</div>
         <div class="q"><div class="ql">Clarity on direction</div><div class="qh">Do I know what I actually want right now?</div><div class="sr"><input type="range" min="1" max="10" value="5" id="d1" oninput="upd(this,'n5')"><span class="snum" id="n5">5</span></div></div>
@@ -199,8 +198,8 @@ input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;bac
           <div class="r-state" id="rst"></div>
         </div>
         <div class="scores">
-          <div class="sc"><div class="sc-val" style="color:#B04A77" id="rihi">—</div><div class="sc-lbl">IHI</div></div>
-          <div class="sc"><div class="sc-val" style="color:#2F76B5" id="ridi">—</div><div class="sc-lbl">IDI</div></div>
+          <div class="sc"><div class="sc-val" style="color:#B04A77" id="rihi">—</div><div class="sc-lbl">HI</div></div>
+          <div class="sc"><div class="sc-val" style="color:#24705F" id="ridi">—</div><div class="sc-lbl">DI</div></div>
         </div>
         <div class="coaches" id="rcoach"></div>
         <div class="bars" id="rbars"></div>
@@ -221,13 +220,8 @@ input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;bac
       <div class="chart-wrap"><canvas id="hc"></canvas><div class="chartoff" id="chartoff" hidden>Chart unavailable offline. Your numbers are listed below.</div></div>
       <div class="legend">
         <div class="li"><div class="ld" style="background:#3559B5"></div>Overall</div>
-        <div class="li"><div class="ld" style="background:#D2628F"></div>IHI</div>
-        <div class="li"><div class="ld" style="background:#4A93D6"></div>IDI</div>
-      </div>
-      <div class="keydef">
-        <div><strong>IHI — Index of Happiness.</strong> How you are today: sleep, body, emotional baseline, presence with yourself.</div>
-        <div style="margin-top:6px;"><strong>IDI — Index of Development.</strong> Where you are heading: clarity, self-acceptance, structure, growth, connection.</div>
-        <div style="margin-top:6px;"><strong>Overall.</strong> The average of the two. Each number is a simple average of your own 1–10 answers, nothing more.</div>
+        <div class="li"><div class="ld" style="background:#D2628F"></div>Happiness Index</div>
+        <div class="li"><div class="ld" style="background:#2E8F7A"></div>Development Index</div>
       </div>
       <div style="display:flex;gap:8px;margin:0 0 1rem;">
         <button class="btn" style="flex:1;font-size:12px;" onclick="exportData()">Export data</button>
@@ -236,8 +230,8 @@ input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;bac
       <div class="hcard today">
         <div class="hdate"><div class="hday" id="hToday"></div><div class="htag">Day 1 · Baseline</div></div>
         <div class="hscores">
-          <div class="hs"><div class="hs-v" style="color:#B04A77">—</div><div class="hs-l">IHI</div></div>
-          <div class="hs"><div class="hs-v" style="color:#2F76B5">—</div><div class="hs-l">IDI</div></div>
+          <div class="hs"><div class="hs-v" style="color:#B04A77">—</div><div class="hs-l">HI</div></div>
+          <div class="hs"><div class="hs-v" style="color:#24705F">—</div><div class="hs-l">DI</div></div>
         </div>
         <div class="hcdi">—</div><div class="htrend">—</div>
       </div>
@@ -296,7 +290,7 @@ const STORE='ingrid_daily_index_v1';
 const KEYSTORE='ingrid_daily_index_key';
 const API='https://script.google.com/macros/s/AKfycbzHcGLqbjtKHGX8Pmfxb5bsvduobTgszSiIzCCtwagSoE5i8OgR2xVRFyQB5EDAchcmiw/exec';
 const DATE_RE=/^\d{4}-\d{2}-\d{2}$/;
-const C={overall:'#3559B5',ihi:'#D2628F',idi:'#4A93D6',good:'#2E8F7A',mid:'#3559B5',low:'#D2628F'};
+const C={overall:'#3559B5',ihi:'#D2628F',idi:'#2E8F7A',good:'#2E8F7A',mid:'#3559B5',low:'#D2628F'};
 const LBS=['Sleep','Body','Mood','Presence','Clarity','Self-acceptance','Structure','Growth','Connection'];
 
 function safeGet(k){try{return localStorage.getItem(k);}catch(e){return null;}}
@@ -545,8 +539,8 @@ function renderJourney(){
     return'<div class="hcard">'+
       '<div class="hdate"><div class="hday">'+fmtDay(d.date)+'</div><div class="htag">Day '+(history.length-idx-1)+'</div></div>'+
       '<div class="hscores">'+
-        '<div class="hs"><div class="hs-v" style="color:#B04A77">'+d.ihi.toFixed(1)+'</div><div class="hs-l">IHI</div></div>'+
-        '<div class="hs"><div class="hs-v" style="color:#2F76B5">'+d.idi.toFixed(1)+'</div><div class="hs-l">IDI</div></div>'+
+        '<div class="hs"><div class="hs-v" style="color:#B04A77">'+d.ihi.toFixed(1)+'</div><div class="hs-l">HI</div></div>'+
+        '<div class="hs"><div class="hs-v" style="color:#24705F">'+d.idi.toFixed(1)+'</div><div class="hs-l">DI</div></div>'+
       '</div>'+
       '<div class="hcdi">'+d.overall.toFixed(1)+'</div><div class="htrend">'+dtxt+'</div>'+
     '</div>';
@@ -593,8 +587,8 @@ function renderChart(){
       labels:labels,
       datasets:[
         {label:'Overall',data:has?history.map(h=>h.overall):[null],borderColor:C.overall,backgroundColor:'rgba(53,89,181,0.08)',tension:0.4,pointRadius:5,pointBackgroundColor:C.overall,pointBorderColor:'#fff',pointBorderWidth:2,borderWidth:2,fill:true},
-        {label:'IHI',data:has?history.map(h=>h.ihi):[null],borderColor:C.ihi,backgroundColor:'transparent',tension:0.4,pointRadius:4,pointBackgroundColor:C.ihi,pointBorderColor:'#fff',pointBorderWidth:2,borderWidth:2,borderDash:[5,3]},
-        {label:'IDI',data:has?history.map(h=>h.idi):[null],borderColor:C.idi,backgroundColor:'transparent',tension:0.4,pointRadius:4,pointBackgroundColor:C.idi,pointBorderColor:'#fff',pointBorderWidth:2,borderWidth:2,borderDash:[2,3]}
+        {label:'HI',data:has?history.map(h=>h.ihi):[null],borderColor:C.ihi,backgroundColor:'transparent',tension:0.4,pointRadius:4,pointBackgroundColor:C.ihi,pointBorderColor:'#fff',pointBorderWidth:2,borderWidth:2,borderDash:[5,3]},
+        {label:'DI',data:has?history.map(h=>h.idi):[null],borderColor:C.idi,backgroundColor:'transparent',tension:0.4,pointRadius:4,pointBackgroundColor:C.idi,pointBorderColor:'#fff',pointBorderWidth:2,borderWidth:2,borderDash:[2,3]}
       ]
     },
     options:{
