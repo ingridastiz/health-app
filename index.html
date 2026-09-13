@@ -134,7 +134,7 @@ input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;bac
   <div class="gate-card">
     <div class="gate-logo">INGRID</div>
     <div class="gate-title">Enter your passphrase</div>
-    <div class="gate-sub">Your check-ins live in your own Google Sheet. The passphrase is checked on the server and remembered on this device until you lock the app.</div>
+    <div class="gate-sub">Your check-ins live in your own Google Sheet. The passphrase is checked on the server and remembered on this device.</div>
     <input type="password" id="gpass" autocomplete="current-password" placeholder="Passphrase">
     <button class="btn btn-m" id="gbtn">Unlock</button>
     <div class="gate-err" id="gerr"></div>
@@ -247,10 +247,6 @@ input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;bac
       <div id="hsec" class="hsec" hidden>Previous days</div>
       <div id="hlist"></div>
       <div class="insight" id="gettingStarted"><strong>Getting started:</strong> your first check-in becomes your baseline. From day two, this page will show how your Happiness and Development scores move together — and what that tells you.</div>
-      <div style="text-align:center;margin-top:1rem;">
-        <button class="btn" style="font-size:12px;" onclick="exportData()">Export data</button>
-        <button class="btn" style="font-size:12px;" onclick="lock()">Lock app</button>
-      </div>
     </div>
   </div>
 
@@ -305,7 +301,6 @@ const LBS=['Sleep','Body','Inner Weather','Presence','Clarity','Self-acceptance'
 
 function safeGet(k){try{return localStorage.getItem(k);}catch(e){return null;}}
 function safeSet(k,v){try{localStorage.setItem(k,v);return true;}catch(e){return false;}}
-function safeDel(k){try{localStorage.removeItem(k);}catch(e){}}
 
 function loadHistory(){
   try{const raw=safeGet(STORE);return raw?JSON.parse(raw):[];}
@@ -365,21 +360,6 @@ async function unlock(){
     document.getElementById('gerr').textContent=res.srv?('Server error: '+res.srv):'Cannot reach the server. Check your connection.';
     key='';
   }
-}
-function lock(){
-  safeDel(KEYSTORE);
-  key='';
-  showGate('Locked. Your saved check-ins stay in your sheet.');
-}
-function exportData(){
-  const blob=new Blob([JSON.stringify(history,null,2)],{type:'application/json'});
-  const a=document.createElement('a');
-  a.href=URL.createObjectURL(blob);
-  a.download='ingrid-daily-index-'+todayStr()+'.json';
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-  setTimeout(()=>URL.revokeObjectURL(a.href),1000);
 }
 
 /* ---------- API ---------- */

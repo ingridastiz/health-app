@@ -19,7 +19,7 @@ Código en `apps-script/Code.gs`. Vive además en el editor de Apps Script de la
 URL publicada en la constante `API` de `index.html`. Contrato: POST con body JSON `{key, action, entry?}`.
 - `action: 'list'` devuelve `{ok:true, data:[...]}`.
 - `action: 'save'` hace upsert por fecha. No hace falta deduplicar del lado del cliente.
-- La passphrase se guarda en la Script Property `PASS` (exactamente así, en mayúsculas) y en `localStorage` del navegador (`ingrid_daily_index_key`) hasta que se toca "Lock app".
+- La passphrase se guarda en la Script Property `PASS` (exactamente así, en mayúsculas) y en `localStorage` del navegador (`ingrid_daily_index_key`). No hay botón para bloquear la app (se quitó a pedido de Ingrid): la passphrase solo se olvida si el servidor responde `auth` o si se borran los datos del sitio en el navegador.
 - Errores: `{error:'auth'}` (passphrase incorrecta o ausente), `{error:'setup', message}` (falta `PASS`), `{error:'bad request', message}`, `{error:'unknown action'}`. El frontend muestra el `message` (o el `error`) como "Server error: ...".
 - Fechas: el script guarda la columna `date` como texto `yyyy-MM-dd`. Verificado el 13/09/2026 que el cliente las lee sin desfase de zona horaria. No tocar `normDate()` por esto.
 
@@ -30,13 +30,13 @@ URL publicada en la constante `API` de `index.html`. Contrato: POST con body JSO
 
 ## Reglas sobre los datos
 - Si un cambio toca el esquema de datos (`date, ihi, idi, overall, values[9]`), subir la versión de la clave de `localStorage` (`_v2`) con migración, adaptar `apps-script/Code.gs`, y decirle a Ingrid qué pasa con su historial antes de aplicarlo.
-- Antes de probar cambios que toquen `localStorage` o la sincronización, recordarle usar "Export data" en el tab Journey.
+- No hay exportación en la app (se quitó a pedido de Ingrid; no volver a agregarla sin pedirlo). El backup es la planilla: antes de probar cambios que toquen `localStorage` o la sincronización, sugerir hacer una copia de la hoja (Archivo > Hacer una copia).
 - Los índices son promedios simples, sin respaldo psicométrico. Si se les da un uso que dependa de la validez de la medición, decirlo.
 
 ## Deuda técnica conocida
 - `mergeRemote()` le da prioridad al dato remoto sobre el local para la misma fecha, sin comparar cuál es más reciente. Si un guardado falla, el check-in nuevo queda solo en el dispositivo y la siguiente sincronización lo pisa. Decisión consciente: no hay cola de reintentos. No agregar una sin pedirlo.
 - `saveEntry_()` no usa `LockService`: dos guardados simultáneos de la misma fecha podrían duplicar la fila. Improbable con un solo usuario.
-- Sin conexión no se puede desbloquear la app si antes se bloqueó.
+- Sin botón de bloqueo: cualquiera con acceso al dispositivo desbloqueado entra a la app y ve el historial.
 - La seguridad es una sola passphrase contra un endpoint público. Sin cuentas ni rate limiting.
 
 ## Licencia
