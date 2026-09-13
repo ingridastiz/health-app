@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>INGRID — Daily Index</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
@@ -134,7 +134,7 @@ input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;bac
   <div class="gate-card">
     <div class="gate-logo">INGRID</div>
     <div class="gate-title">Enter your passphrase</div>
-    <div class="gate-sub">Your check-ins live in your own Google Sheet. The passphrase is checked on the server, never stored in this page.</div>
+    <div class="gate-sub">Your check-ins live in your own Google Sheet. The passphrase is checked on the server and remembered on this device until you lock the app.</div>
     <input type="password" id="gpass" autocomplete="current-password" placeholder="Passphrase">
     <button class="btn btn-m" id="gbtn">Unlock</button>
     <div class="gate-err" id="gerr"></div>
@@ -165,7 +165,7 @@ input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;bac
         <div class="ssub">Four dimensions · Scale 1–10 · Be honest with yourself</div>
         <div class="q"><div class="ql">Sleep &amp; recovery</div><div class="qh">How rested do you feel?</div><div class="sr"><input type="range" min="1" max="10" value="5" id="t1" oninput="upd(this,'n1')"><span class="snum" id="n1">5</span></div></div>
         <div class="q"><div class="ql">Body feeling</div><div class="qh">Energy, tension, physical vitality?</div><div class="sr"><input type="range" min="1" max="10" value="5" id="t2" oninput="upd(this,'n2')"><span class="snum" id="n2">5</span></div></div>
-        <div class="q"><div class="ql">Emotional baseline</div><div class="qh">Calm / restless / at ease today?</div><div class="sr"><input type="range" min="1" max="10" value="5" id="t3" oninput="upd(this,'n3')"><span class="snum" id="n3">5</span></div></div>
+        <div class="q"><div class="ql">Inner Weather</div><div class="qh">Calm, or stirred up today?</div><div class="sr"><input type="range" min="1" max="10" value="5" id="t3" oninput="upd(this,'n3')"><span class="snum" id="n3">5</span></div></div>
         <div class="q"><div class="ql">Presence with myself</div><div class="qh">Do I really feel like myself right now?</div><div class="sr"><input type="range" min="1" max="10" value="5" id="t4" oninput="upd(this,'n4')"><span class="snum" id="n4">5</span></div></div>
         <div class="nav"><div class="dots"><div class="dot on"></div><div class="dot"></div><div class="dot"></div></div><button class="btn btn-m" onclick="goS(2)">Next →</button></div>
       </div>
@@ -207,11 +207,10 @@ input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;bac
         <div class="coaches" id="rcoach"></div>
         <div class="bars" id="rbars"></div>
         <div class="nav" style="justify-content:center;gap:12px;">
-          <button class="btn" onclick="reset()">New day</button>
+          <button class="btn" onclick="reset()">New entry</button>
           <button class="btn btn-m" onclick="showTab('hist',document.querySelectorAll('.tab')[2])">See journey →</button>
         </div>
         <div class="sync" id="sync">&nbsp;</div>
-        <div class="fq">"You're not running. You're finding your way back."</div>
       </div>
 
     </div>
@@ -228,7 +227,7 @@ input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;bac
           <option value="all">All three indexes</option>
           <option value="0">Sleep &amp; recovery</option>
           <option value="1">Body feeling</option>
-          <option value="2">Emotional baseline</option>
+          <option value="2">Inner Weather</option>
           <option value="3">Presence with myself</option>
           <option value="4">Clarity on direction</option>
           <option value="5">Self-acceptance</option>
@@ -267,7 +266,7 @@ input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;bac
         <div class="usp-card">
           <div class="usp-card-num">2</div>
           <div class="usp-card-title">indices, not one score</div>
-          <div class="usp-card-text">The Happiness Index is about today: sleep, body, mood, presence. The Development Index is about direction: clarity, self-acceptance, structure, growth, connection. Feeling good and moving forward are not the same thing — INGRID tracks both.</div>
+          <div class="usp-card-text">The Happiness Index is about today: sleep, body, inner weather, presence. The Development Index is about direction: clarity, self-acceptance, structure, growth, connection. Feeling good and moving forward are not the same thing — INGRID tracks both.</div>
         </div>
         <div class="usp-card">
           <div class="usp-card-num">3</div>
@@ -301,7 +300,7 @@ const KEYSTORE='ingrid_daily_index_key';
 const API='https://script.google.com/macros/s/AKfycbzHcGLqbjtKHGX8Pmfxb5bsvduobTgszSiIzCCtwagSoE5i8OgR2xVRFyQB5EDAchcmiw/exec';
 const DATE_RE=/^\d{4}-\d{2}-\d{2}$/;
 const C={overall:'#3559B5',ihi:'#D2628F',idi:'#2E8F7A',good:'#2E8F7A',mid:'#3559B5',low:'#D2628F'};
-const LBS=['Sleep','Body','Mood','Presence','Clarity','Self-acceptance','Structure','Growth','Connection'];
+const LBS=['Sleep','Body','Inner Weather','Presence','Clarity','Self-acceptance','Structure','Growth','Connection'];
 
 function safeGet(k){try{return localStorage.getItem(k);}catch(e){return null;}}
 function safeSet(k,v){try{localStorage.setItem(k,v);return true;}catch(e){return false;}}
@@ -362,7 +361,7 @@ async function unlock(){
     key='';
     document.getElementById('gerr').textContent='Wrong passphrase.';
   }else{
-    document.getElementById('gerr').textContent='Cannot reach the server. Check your connection.';
+    document.getElementById('gerr').textContent=res.srv?('Server error: '+res.srv):'Cannot reach the server. Check your connection.';
     key='';
   }
 }
@@ -377,10 +376,13 @@ async function apiCall(payload){
   try{
     const body=JSON.stringify(Object.assign({key:key},payload));
     const r=await fetch(API,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:body});
-    if(!r.ok)return{ok:false,net:true};
-    const j=await r.json();
+    const txt=await r.text();
+    if(!r.ok){console.warn('API HTTP '+r.status,txt.slice(0,300));return{ok:false,net:true};}
+    let j=null;
+    try{j=JSON.parse(txt);}catch(e){console.warn('API respuesta no-JSON',txt.slice(0,300));return{ok:false,net:true};}
     if(j&&j.error==='auth')return{ok:false,auth:true};
-    if(!j||j.ok!==true)return{ok:false,net:true};
+    if(j&&j.error){console.warn('API error',j);return{ok:false,srv:String(j.message||j.error)};}
+    if(!j||j.ok!==true){console.warn('API error',j);return{ok:false,net:true};}
     return{ok:true,data:j.data};
   }catch(e){
     console.warn('API call failed',e);
@@ -423,7 +425,7 @@ async function syncFromServer(){
     showGate('Your passphrase is no longer valid.');
   }else{
     renderJourney();
-    setSync('Offline — saved on this device','err');
+    setSync(res.srv?('Server error: '+res.srv):'Offline — saved on this device','err');
   }
 }
 async function pushRemote(entry){
@@ -431,7 +433,7 @@ async function pushRemote(entry){
   const res=await apiCall({action:'save',entry:entry});
   if(res.ok)setSync('Saved to your sheet','ok');
   else if(res.auth)showGate('Your passphrase is no longer valid.');
-  else setSync('Not saved to sheet — saved on this device','err');
+  else setSync(res.srv?('Not saved to sheet: '+res.srv):'Not saved to sheet — saved on this device','err');
 }
 
 /* ---------- UI ---------- */
