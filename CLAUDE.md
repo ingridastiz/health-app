@@ -18,7 +18,7 @@ App personal de check-in diario, que Ingrid hace a la mañana. Un solo archivo: 
   - Bored: entusiasmo bajo.
   - Steady: los tres en 6 o más.
   - Mixed: el resto.
-  Objetivo: que Ingrid vea su ciclo aburrimiento > sobreexigencia > cansancio > parar todo. Journey muestra la franja de fases; el coach avisa cuando la fase es Bored.
+  Objetivo: que Ingrid vea su ciclo aburrimiento > sobreexigencia > cansancio > parar todo. La fase se muestra en Result y en cada tarjeta de Journey; el coach avisa cuando la fase es Bored.
 - Persistencia doble: `localStorage` (clave `ingrid_daily_index_v2`) y una Google Sheet vía Apps Script.
 - `IDS`, `LBS`, `values`, el `<select>` de Journey y las columnas del Apps Script comparten el mismo orden. Si cambia una pregunta hay que tocar: el HTML del check-in, `LBS`, el `<select>`, el mapa `wt` de mensajes del coach, el texto de "Why this", `HEADERS` en `apps-script/Code.gs` y `README.md`.
 
@@ -37,6 +37,8 @@ URL publicada en la constante `API` de `index.html`. Contrato: POST con body JSO
 - Las flechas tipográficas en botones ("Next →", "← Back", "See journey →") no cuentan como iconos.
 - Se sacaron a propósito Clarity, Growth y Sleep (siempre daban alto) y la versión anterior de 9 preguntas con HI/DI. El historial viejo se descartó el 13/09/2026.
 - No hay exportación ni botón de bloqueo en la app. No volver a agregarlos sin pedirlo.
+- Colores: BI en rosa (`#B04A77`), RI en verde (`#24705F`). Nada de marrón ni ámbar.
+- Sin subtítulo bajo el título de cada pantalla del check-in, sin franja ni leyenda de fases en Journey, y sin las tarjetas numeradas en "Why this". Se sacaron a pedido de Ingrid.
 
 ## Reglas sobre los datos
 - Si un cambio toca el esquema de datos, subir la versión de la clave de `localStorage` (`_v3`), adaptar `apps-script/Code.gs`, y decirle a Ingrid qué pasa con su historial antes de aplicarlo.

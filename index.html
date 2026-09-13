@@ -27,10 +27,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .ps{font-size:10px;color:#AEB6C6;}
 .ps.on{color:var(--accent,#3559B5);font-weight:600;}
 .badge{display:inline-block;padding:4px 14px;border-radius:20px;font-size:10px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;margin-bottom:10px;}
-.b-bi{background:#FBF1E1;color:#9A6512;}
+.b-bi{background:#FBE9F0;color:#B04A77;}
 .b-ri{background:#E3F1ED;color:#24705F;}
-.stitle{font-size:19px;font-weight:600;color:#17203A;margin-bottom:4px;}
-.ssub{font-size:13px;color:#7A8398;margin-bottom:1.4rem;line-height:1.5;}
+.stitle{font-size:19px;font-weight:600;color:#17203A;margin-bottom:1.4rem;}
 .q{margin-bottom:1.1rem;}
 .ql{font-size:14px;font-weight:500;color:#17203A;margin-bottom:2px;}
 .qh{font-size:11px;color:#98A1B3;margin-bottom:8px;}
@@ -44,7 +43,7 @@ input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;bac
 .btn:active{background:#EDF1F8;}
 .btn-m{background:var(--accent,#3559B5);border-color:var(--accent,#3559B5);color:#fff;font-weight:500;}
 .btn-m:active{filter:brightness(0.88);}
-#s1{--accent:#9A6512;}
+#s1{--accent:#B04A77;}
 #s2{--accent:#24705F;}
 .dots{display:flex;gap:6px;align-items:center;}
 .dot{width:6px;height:6px;border-radius:50%;background:#D5DCE8;transition:all 0.3s;}
@@ -97,10 +96,6 @@ input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;bac
 .varpick select{flex:1;padding:8px 10px;border-radius:10px;border:0.5px solid #D5DCE8;background:#fff;color:#17203A;font-size:13px;font-family:inherit;outline:none;}
 .li{display:flex;align-items:center;gap:6px;font-size:12px;color:#7A8398;}
 .ld{width:8px;height:8px;border-radius:50%;}
-.pstrip{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:8px;}
-.pd{width:14px;height:14px;border-radius:3px;}
-.plegend{display:flex;gap:6px 12px;flex-wrap:wrap;margin-bottom:0.5rem;}
-.plegend .ld{border-radius:2px;}
 .hcard{background:#FAFBFD;border-radius:14px;padding:14px;margin-bottom:10px;display:flex;align-items:center;gap:12px;border:0.5px solid #E6EAF2;}
 .hcard.today{border-color:#3559B5;border-width:1.5px;background:#fff;}
 .hdate{width:96px;flex-shrink:0;}
@@ -121,11 +116,6 @@ input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;bac
 .usp-top{font-size:11px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:#9EC5F0;margin-bottom:1rem;}
 .usp-main{font-size:21px;font-weight:600;color:#fff;line-height:1.5;margin-bottom:1rem;}
 .usp-sub{font-size:14px;color:#C2CEE4;line-height:1.6;}
-.usp-cards{display:flex;flex-direction:column;gap:10px;margin-bottom:1rem;}
-.usp-card{background:#fff;border-radius:16px;padding:16px;border:0.5px solid #E6EAF2;}
-.usp-card-num{font-size:32px;font-weight:600;color:#3559B5;margin-bottom:4px;}
-.usp-card-title{font-size:14px;font-weight:500;color:#17203A;margin-bottom:4px;}
-.usp-card-text{font-size:13px;color:#7A8398;line-height:1.5;}
 .usp-hook{background:#FBE9F0;border-radius:16px;padding:16px 18px;text-align:center;}
 .usp-hook-text{font-size:15px;font-weight:500;color:#A03A68;line-height:1.5;margin-bottom:8px;}
 .usp-hook-sub{font-size:12px;color:#B04A77;}
@@ -165,7 +155,6 @@ input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;bac
         <div class="prog-steps"><span class="ps on">Yesterday</span><span class="ps">Today</span><span class="ps">Result</span></div>
         <div class="badge b-bi">BI — Balance Index</div>
         <div class="stitle">How was yesterday?</div>
-        <div class="ssub">Four questions · Scale 1–10 · Be honest with myself</div>
         <div class="q"><div class="ql">Real connection</div><div class="qh">How genuine was my human contact yesterday?</div><div class="sr"><input type="range" min="1" max="10" value="5" id="y1" oninput="upd(this,'n1')"><span class="snum" id="n1">5</span></div></div>
         <div class="q"><div class="ql">Sustainable effort</div><div class="qh">How sustainable was my effort yesterday?</div><div class="sr"><input type="range" min="1" max="10" value="5" id="y2" oninput="upd(this,'n2')"><span class="snum" id="n2">5</span></div></div>
         <div class="q"><div class="ql">Joy</div><div class="qh">How much did I enjoy yesterday?</div><div class="sr"><input type="range" min="1" max="10" value="5" id="y3" oninput="upd(this,'n3')"><span class="snum" id="n3">5</span></div></div>
@@ -179,7 +168,6 @@ input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;bac
         <div class="prog-steps"><span class="ps">Yesterday</span><span class="ps on">Today</span><span class="ps">Result</span></div>
         <div class="badge b-ri">RI — Rise Index</div>
         <div class="stitle">How do I feel about today?</div>
-        <div class="ssub">Four questions · Scale 1–10 · Be honest with myself</div>
         <div class="q"><div class="ql">Body energy</div><div class="qh">How much energy and physical vitality do I have?</div><div class="sr"><input type="range" min="1" max="10" value="5" id="r1" oninput="upd(this,'n5')"><span class="snum" id="n5">5</span></div></div>
         <div class="q"><div class="ql">Self-acceptance</div><div class="qh">How kind am I being to myself this morning?</div><div class="sr"><input type="range" min="1" max="10" value="5" id="r2" oninput="upd(this,'n6')"><span class="snum" id="n6">5</span></div></div>
         <div class="q"><div class="ql">Health routine</div><div class="qh">How committed am I to my health routine today?</div><div class="sr"><input type="range" min="1" max="10" value="5" id="r3" oninput="upd(this,'n7')"><span class="snum" id="n7">5</span></div></div>
@@ -203,7 +191,7 @@ input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;bac
           <div class="r-state" id="rst"></div>
         </div>
         <div class="scores">
-          <div class="sc"><div class="sc-val" style="color:#9A6512" id="rbi">—</div><div class="sc-lbl">BI</div></div>
+          <div class="sc"><div class="sc-val" style="color:#B04A77" id="rbi">—</div><div class="sc-lbl">BI</div></div>
           <div class="sc"><div class="sc-val" style="color:#24705F" id="rri">—</div><div class="sc-lbl">RI</div></div>
         </div>
         <div class="coaches" id="rcoach"></div>
@@ -241,15 +229,10 @@ input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;bac
           </optgroup>
         </select>
       </div>
-      <div id="rhythm" hidden>
-        <div class="hsec">Rhythm</div>
-        <div class="pstrip" id="pstrip"></div>
-        <div class="plegend" id="plegend"></div>
-      </div>
       <div class="hcard today">
         <div class="hdate"><div class="hday" id="hToday"></div><div class="htag">Not checked in yet</div></div>
         <div class="hscores">
-          <div class="hs"><div class="hs-v" style="color:#9A6512">—</div><div class="hs-l">BI</div></div>
+          <div class="hs"><div class="hs-v" style="color:#B04A77">—</div><div class="hs-l">BI</div></div>
           <div class="hs"><div class="hs-v" style="color:#24705F">—</div><div class="hs-l">RI</div></div>
         </div>
         <div class="hcdi">—</div><div class="htrend">—</div>
@@ -267,24 +250,6 @@ input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;bac
         <div class="usp-top">A question worth asking daily</div>
         <div class="usp-main">"How did I live yesterday —<br>and how am I rising into today?"</div>
         <div class="usp-sub">Two different questions. Most days we only answer one, or neither. INGRID asks both, every morning, in two minutes, so the pattern between them becomes visible instead of invisible.</div>
-      </div>
-
-      <div class="usp-cards">
-        <div class="usp-card">
-          <div class="usp-card-num">2</div>
-          <div class="usp-card-title">indices, not one score</div>
-          <div class="usp-card-text">The Balance Index looks back at yesterday: real connection, sustainable effort, joy, movement. The Rise Index is about how I start today: body energy, self-acceptance, health routine, enthusiasm.</div>
-        </div>
-        <div class="usp-card">
-          <div class="usp-card-num">2</div>
-          <div class="usp-card-title">minutes a day</div>
-          <div class="usp-card-text">Eight questions. Two numbers. One phase. That's it.</div>
-        </div>
-        <div class="usp-card">
-          <div class="usp-card-num">30</div>
-          <div class="usp-card-title">days to see the cycle</div>
-          <div class="usp-card-text">A month in, the rhythm becomes visible: the bored days, the overdrive that follows, the crash, the stop, and how long each turn lasts.</div>
-        </div>
       </div>
 
       <div class="usp-hook">
@@ -307,7 +272,7 @@ try{localStorage.removeItem('ingrid_daily_index_v1');}catch(e){}
 const KEYSTORE='ingrid_daily_index_key';
 const API='https://script.google.com/macros/s/AKfycbzHcGLqbjtKHGX8Pmfxb5bsvduobTgszSiIzCCtwagSoE5i8OgR2xVRFyQB5EDAchcmiw/exec';
 const DATE_RE=/^\d{4}-\d{2}-\d{2}$/;
-const C={overall:'#3559B5',bi:'#C98A2B',ri:'#2E8F7A',good:'#2E8F7A',mid:'#3559B5',low:'#D2628F'};
+const C={overall:'#3559B5',bi:'#D2628F',ri:'#2E8F7A',good:'#2E8F7A',mid:'#3559B5',low:'#D2628F'};
 // Orden de IDS, LBS, values y columnas del Apps Script: siempre el mismo.
 const IDS=['y1','y2','y3','y4','r1','r2','r3','r4'];
 const LBS=['Real connection','Sustainable effort','Joy','Movement','Body energy','Self-acceptance','Health routine','Enthusiasm'];
@@ -598,10 +563,6 @@ function renderJourney(){
   const tag=document.querySelector('.hcard.today .htag');
   if(tag)tag.innerHTML=h?('Day '+(ti+1)+' · '+phaseTag(ph[ti])):'Not checked in yet';
 
-  document.getElementById('rhythm').hidden=history.length===0;
-  document.getElementById('pstrip').innerHTML=history.map((x,i)=>'<div class="pd" title="'+fmtDay(x.date)+': '+ph[i]+'" style="background:'+PCOL[ph[i]]+'"></div>').join('');
-  document.getElementById('plegend').innerHTML=PHASES.map(p=>'<div class="li"><div class="ld" style="background:'+p[1]+'"></div>'+p[0]+'</div>').join('');
-
   const pastIdx=history.map((_,i)=>i).filter(i=>history[i].date!==today).reverse();
   document.getElementById('hsec').hidden=pastIdx.length===0;
   document.getElementById('hlist').innerHTML=pastIdx.map((i,n)=>{
@@ -612,7 +573,7 @@ function renderJourney(){
     return'<div class="hcard">'+
       '<div class="hdate"><div class="hday">'+fmtDay(d.date)+'</div><div class="htag">Day '+(i+1)+' · '+phaseTag(ph[i])+'</div></div>'+
       '<div class="hscores">'+
-        '<div class="hs"><div class="hs-v" style="color:#9A6512">'+d.bi.toFixed(1)+'</div><div class="hs-l">BI</div></div>'+
+        '<div class="hs"><div class="hs-v" style="color:#B04A77">'+d.bi.toFixed(1)+'</div><div class="hs-l">BI</div></div>'+
         '<div class="hs"><div class="hs-v" style="color:#24705F">'+d.ri.toFixed(1)+'</div><div class="hs-l">RI</div></div>'+
       '</div>'+
       '<div class="hcdi">'+d.overall.toFixed(1)+'</div><div class="htrend">'+dtxt+'</div>'+
@@ -621,7 +582,7 @@ function renderJourney(){
 
   document.getElementById('gettingStarted').hidden=history.length>0;
   renderLegend();
-  renderChart(ph);
+  renderChart();
 }
 
 let chartVar='all';
@@ -637,7 +598,7 @@ function renderLegend(){
 }
 
 let chartInst=null;
-function renderChart(ph){
+function renderChart(){
   const cv=document.getElementById('hc');
   if(!cv)return;
   const warn=document.getElementById('chartoff');
@@ -649,13 +610,12 @@ function renderChart(ph){
   if(warn)warn.hidden=true;
   cv.hidden=false;
   if(chartInst)chartInst.destroy();
-  if(!ph)ph=history.map((_,i)=>phaseAt(history,i));
   const has=history.length>0;
   const labels=has?history.map(h=>new Date(h.date+'T00:00:00').toLocaleDateString('en-GB',{day:'numeric',month:'short'})):['Day 1'];
   let datasets;
   if(chartVar==='all'){
     datasets=[
-      {label:'Overall',data:has?history.map(h=>h.overall):[null],borderColor:C.overall,backgroundColor:'rgba(53,89,181,0.08)',tension:0.4,pointRadius:5,pointBackgroundColor:has?ph.map(p=>PCOL[p]):C.overall,pointBorderColor:'#fff',pointBorderWidth:2,borderWidth:2,fill:true},
+      {label:'Overall',data:has?history.map(h=>h.overall):[null],borderColor:C.overall,backgroundColor:'rgba(53,89,181,0.08)',tension:0.4,pointRadius:5,pointBackgroundColor:C.overall,pointBorderColor:'#fff',pointBorderWidth:2,borderWidth:2,fill:true},
       {label:'BI',data:has?history.map(h=>h.bi):[null],borderColor:C.bi,backgroundColor:'transparent',tension:0.4,pointRadius:4,pointBackgroundColor:C.bi,pointBorderColor:'#fff',pointBorderWidth:2,borderWidth:2,borderDash:[5,3]},
       {label:'RI',data:has?history.map(h=>h.ri):[null],borderColor:C.ri,backgroundColor:'transparent',tension:0.4,pointRadius:4,pointBackgroundColor:C.ri,pointBorderColor:'#fff',pointBorderWidth:2,borderWidth:2,borderDash:[2,3]}
     ];
