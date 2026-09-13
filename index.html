@@ -66,7 +66,6 @@ input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;bac
 .ring-num{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;pointer-events:none;}
 .ring-val{font-size:40px;font-weight:600;color:#3559B5;line-height:1;animation:countUp 0.6s ease 0.3s both;}
 .ring-lbl{font-size:11px;color:#98A1B3;letter-spacing:0.05em;margin-top:4px;}
-.r-state{font-size:13px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;margin-bottom:1.2rem;}
 .scores{display:flex;gap:10px;margin-bottom:1.2rem;}
 .sc{flex:1;background:#FAFBFD;border-radius:14px;padding:12px;text-align:center;border:0.5px solid #E6EAF2;}
 .sc-val{font-size:22px;font-weight:600;}
@@ -96,7 +95,9 @@ input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;bac
 .varpick select{flex:1;padding:8px 10px;border-radius:10px;border:0.5px solid #D5DCE8;background:#fff;color:#17203A;font-size:13px;font-family:inherit;outline:none;}
 .li{display:flex;align-items:center;gap:6px;font-size:12px;color:#7A8398;}
 .ld{width:8px;height:8px;border-radius:50%;}
-.hcard{background:#FAFBFD;border-radius:14px;padding:14px;margin-bottom:10px;display:flex;align-items:center;gap:12px;border:0.5px solid #E6EAF2;}
+.hcard{background:#FAFBFD;border-radius:14px;padding:14px;margin-bottom:10px;display:flex;align-items:center;gap:12px;border:0.5px solid #E6EAF2;cursor:pointer;}
+.hdetail{background:#fff;border:0.5px solid #E6EAF2;border-radius:14px;padding:14px;margin:-4px 0 10px;}
+.hdetail .bars{margin-bottom:0;}
 .hcard.today{border-color:#3559B5;border-width:1.5px;background:#fff;}
 .hdate{width:96px;flex-shrink:0;}
 .hday{font-size:13px;font-weight:500;color:#17203A;}
@@ -188,14 +189,8 @@ input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;bac
             </svg>
             <div class="ring-num"><div class="ring-val" id="rcdi">—</div><div class="ring-lbl">Today</div></div>
           </div>
-          <div class="r-state" id="rst"></div>
         </div>
-        <div class="scores">
-          <div class="sc"><div class="sc-val" style="color:#B04A77" id="rbi">—</div><div class="sc-lbl">BI</div></div>
-          <div class="sc"><div class="sc-val" style="color:#24705F" id="rri">—</div><div class="sc-lbl">RI</div></div>
-        </div>
-        <div class="coaches" id="rcoach"></div>
-        <div class="bars" id="rbars"></div>
+        <div id="rdetail"></div>
         <div class="nav" style="justify-content:center;gap:12px;">
           <button class="btn" onclick="reset()">New entry</button>
           <button class="btn btn-m" onclick="showTab('hist',document.querySelectorAll('.tab')[2])">See journey →</button>
@@ -229,7 +224,7 @@ input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;bac
           </optgroup>
         </select>
       </div>
-      <div class="hcard today">
+      <div class="hcard today" onclick="toggleDetail('hdToday',-1)">
         <div class="hdate"><div class="hday" id="hToday"></div><div class="htag">Not checked in yet</div></div>
         <div class="hscores">
           <div class="hs"><div class="hs-v" style="color:#B04A77">—</div><div class="hs-l">BI</div></div>
@@ -237,6 +232,7 @@ input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;bac
         </div>
         <div class="hcdi">—</div><div class="htrend">—</div>
       </div>
+      <div class="hdetail" id="hdToday" hidden></div>
       <div id="hsec" class="hsec" hidden>Previous days</div>
       <div id="hlist"></div>
       <div class="insight" id="gettingStarted"><strong>Getting started:</strong> your first check-in becomes your baseline. From day two, this page shows how your Balance and Rise scores move, and the phase of each day in your rhythm.</div>
@@ -474,10 +470,7 @@ function calc(){
   history.sort((a,b)=>a.date<b.date?-1:1);
   saveHistory();
   const idx=history.findIndex(h=>h.date===today);
-  const phase=phaseAt(history,idx);
 
-  document.getElementById('rbi').textContent=bi.toFixed(1);
-  document.getElementById('rri').textContent=ri.toFixed(1);
   document.getElementById('rcdi').textContent=overall.toFixed(1);
 
   const ring=document.getElementById('ring');
@@ -491,13 +484,21 @@ function calc(){
   else if(overall>=5.5)hl="Go gently today. Quality over quantity.";
   else hl="Be extra kind to yourself today. Listen to what you need.";
   document.getElementById('rhl').textContent=hl;
-  const rst=document.getElementById('rst');
-  rst.textContent=phase;
-  rst.style.color=PCOL[phase];
+  document.getElementById('rdetail').innerHTML=detailHtml(history,idx);
 
+  renderJourney();
+  pushRemote(entry);
+  goS(3);
+}
+
+// Detalle de un dia: BI/RI, mensajes del coach y barras. Se usa en Result y en Journey.
+function detailHtml(list,idx){
+  const h=list[idx];
+  const v=(h.values||[]).map(Number);
+  const phase=phaseAt(list,idx);
   const dmByPhase={
     'Steady':'Sustainable effort, energy and enthusiasm are all in a good place. This is the rhythm to protect.',
-    'Bored':boredLedToOverdrive(history,idx)
+    'Bored':boredLedToOverdrive(list,idx)
       ?'Bored today. Last time this led to overdrive. Pick something engaging but calm, and keep it small.'
       :'Bored today. This is often where overdrive starts. Pick something engaging but calm, and keep it small.',
     'Overdrive':'Yesterday\'s effort was not sustainable. Today, choose one thing less than you planned.',
@@ -522,14 +523,24 @@ function calc(){
   }
   if(high.length>=2)coach+='<div class="cc cc3"><div class="cc-title">Your strength today</div><div class="cc-text">'+high.slice(0,3).map(x=>x.l).join(', ')+' all strong — these are your anchors today. Build on them.</div></div>';
 
-  document.getElementById('rcoach').innerHTML=coach;
-  document.getElementById('rbars').innerHTML=v.map((val,j)=>{
+  const scores='<div class="scores">'+
+    '<div class="sc"><div class="sc-val" style="color:#B04A77">'+h.bi.toFixed(1)+'</div><div class="sc-lbl">BI</div></div>'+
+    '<div class="sc"><div class="sc-val" style="color:#24705F">'+h.ri.toFixed(1)+'</div><div class="sc-lbl">RI</div></div>'+
+  '</div>';
+  const bars=v.map((val,j)=>{
     return'<div class="br"><div class="bl">'+LBS[j]+'</div><div class="bt"><div class="bf" style="width:'+(val*10)+'%;background:'+grpColor(j)+'"></div></div><div class="bn">'+val+'</div></div>';
   }).join('');
+  return scores+'<div class="coaches">'+coach+'</div><div class="bars">'+bars+'</div>';
+}
 
-  renderJourney();
-  pushRemote(entry);
-  goS(3);
+// Abre o cierra el detalle de un dia en Journey. i<0 significa hoy.
+function toggleDetail(elId,i){
+  const el=document.getElementById(elId);
+  if(!el)return;
+  if(i<0)i=history.findIndex(x=>x.date===todayStr());
+  if(i<0)return;
+  if(el.hidden)el.innerHTML=detailHtml(history,i);
+  el.hidden=!el.hidden;
 }
 
 function reset(){
@@ -560,6 +571,7 @@ function renderJourney(){
   const prev=history.filter(x=>x.date<today).slice(-1)[0];
   const tr=document.querySelector('.hcard.today .htrend');
   if(tr)tr.textContent=(h&&prev)?((h.overall-prev.overall>=0?'+':'')+(h.overall-prev.overall).toFixed(1)):'—';
+  document.getElementById('hdToday').hidden=true;
   const tag=document.querySelector('.hcard.today .htag');
   if(tag)tag.innerHTML=h?('Day '+(ti+1)+' · '+phaseTag(ph[ti])):'Not checked in yet';
 
@@ -570,14 +582,15 @@ function renderJourney(){
     const bIdx=pastIdx[n+1];
     const delta=bIdx!==undefined?(d.overall-history[bIdx].overall):null;
     const dtxt=delta===null?'—':((delta>=0?'+':'')+delta.toFixed(1));
-    return'<div class="hcard">'+
+    return'<div class="hcard" onclick="toggleDetail(\'hd'+i+'\','+i+')">'+
       '<div class="hdate"><div class="hday">'+fmtDay(d.date)+'</div><div class="htag">Day '+(i+1)+' · '+phaseTag(ph[i])+'</div></div>'+
       '<div class="hscores">'+
         '<div class="hs"><div class="hs-v" style="color:#B04A77">'+d.bi.toFixed(1)+'</div><div class="hs-l">BI</div></div>'+
         '<div class="hs"><div class="hs-v" style="color:#24705F">'+d.ri.toFixed(1)+'</div><div class="hs-l">RI</div></div>'+
       '</div>'+
       '<div class="hcdi">'+d.overall.toFixed(1)+'</div><div class="htrend">'+dtxt+'</div>'+
-    '</div>';
+    '</div>'+
+    '<div class="hdetail" id="hd'+i+'" hidden></div>';
   }).join('');
 
   document.getElementById('gettingStarted').hidden=history.length>0;

@@ -18,7 +18,7 @@ App personal de check-in diario, que Ingrid hace a la mañana. Un solo archivo: 
   - Bored: entusiasmo bajo.
   - Steady: los tres en 6 o más.
   - Mixed: el resto.
-  Objetivo: que Ingrid vea su ciclo aburrimiento > sobreexigencia > cansancio > parar todo. La fase se muestra en Result y en cada tarjeta de Journey; el coach avisa cuando la fase es Bored.
+  Objetivo: que Ingrid vea su ciclo aburrimiento > sobreexigencia > cansancio > parar todo. La fase se muestra en cada tarjeta de Journey, no en Result (a pedido de Ingrid); el coach avisa cuando la fase es Bored. Tocar una tarjeta de Journey abre el detalle de ese día (BI/RI, coach y barras), generado por `detailHtml()`, la misma función que arma Result.
 - Persistencia doble: `localStorage` (clave `ingrid_daily_index_v2`) y una Google Sheet vía Apps Script.
 - `IDS`, `LBS`, `values`, el `<select>` de Journey y las columnas del Apps Script comparten el mismo orden. Si cambia una pregunta hay que tocar: el HTML del check-in, `LBS`, el `<select>`, el mapa `wt` de mensajes del coach, el texto de "Why this", `HEADERS` en `apps-script/Code.gs` y `README.md`.
 
