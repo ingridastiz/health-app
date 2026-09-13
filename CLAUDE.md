@@ -39,7 +39,7 @@ URL publicada en la constante `API` de `index.html`. Contrato: POST con body JSO
 - No hay exportación ni botón de bloqueo en la app. No volver a agregarlos sin pedirlo.
 - Colores: BI en rosa (`#B04A77`), RI en verde (`#24705F`). Nada de marrón ni ámbar.
 - Sin subtítulo bajo el título de cada pantalla del check-in; en Journey, sin franja ni leyenda de fases, sin "Day N", sin etiqueta de fase y sin mensajes del coach en el detalle; en "Why this", sin tarjetas numeradas ni el párrafo "Two different questions". Se sacaron a pedido de Ingrid.
-- La frase de "Why this" ("Enthusiasm is good...") es fija, no cambia por día.
+- "Why this" tiene solo la frase rosa, fija (no cambia por día), una oración por línea: "Enthusiasm is good. / Overdoing it is not. / Watch the rhythm.", y el botón para empezar. Sin el recuadro oscuro "A question worth asking daily".
 
 ## Reglas sobre los datos
 - Si un cambio toca el esquema de datos, subir la versión de la clave de `localStorage` (`_v3`), adaptar `apps-script/Code.gs`, y decirle a Ingrid qué pasa con su historial antes de aplicarlo.
