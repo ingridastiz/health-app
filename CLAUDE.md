@@ -40,6 +40,7 @@ URL publicada en la constante `API` de `index.html`. Contrato: POST con body JSO
 - Colores: BI en rosa (`#B04A77`), RI en verde (`#24705F`). Nada de marrón ni ámbar.
 - Sin subtítulo bajo el título de cada pantalla del check-in; en Journey, sin franja ni leyenda de fases, sin "Day N", sin etiqueta de fase y sin mensajes del coach en el detalle; en "Why this", sin tarjetas numeradas ni el párrafo "Two different questions". Se sacaron a pedido de Ingrid.
 - "Why this" tiene solo la frase rosa, fija (no cambia por día), una oración por línea: "Enthusiasm is good. / Overdoing it is not. / Watch the rhythm.", y el botón para empezar. Sin el recuadro oscuro "A question worth asking daily".
+- La pantalla de passphrase tiene una leyenda para quien no es Ingrid (sus amigos llegan a la app): "This app is only for Ingrid's check-ins. / Like it and want to make your own? / You can freely copy my version on GitHub." con link al repo. Va ahí y no en "Why this" porque sin passphrase nadie ve el resto de la app.
 
 ## Reglas sobre los datos
 - Si un cambio toca el esquema de datos, subir la versión de la clave de `localStorage` (`_v3`), adaptar `apps-script/Code.gs`, y decirle a Ingrid qué pasa con su historial antes de aplicarlo.

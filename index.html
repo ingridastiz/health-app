@@ -115,6 +115,8 @@ input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;bac
 .usp-screen{padding:0.5rem 0;}
 .usp-hook{background:#FBE9F0;border-radius:16px;padding:16px 18px;text-align:center;}
 .usp-hook-text{font-size:17px;font-weight:500;color:#A03A68;line-height:1.5;}
+.credit{text-align:center;font-size:12px;color:#98A1B3;line-height:1.6;margin-top:1.2rem;padding:0 0.5rem;}
+.credit a{color:#3559B5;}
 </style>
 </head>
 <body>
@@ -127,6 +129,7 @@ input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;bac
     <input type="password" id="gpass" autocomplete="current-password" placeholder="Passphrase">
     <button class="btn btn-m" id="gbtn">Unlock</button>
     <div class="gate-err" id="gerr"></div>
+    <div class="credit">This app is only for Ingrid's check-ins.<br>Like it and want to make your own?<br>You can freely copy my version on <a href="https://github.com/ingridastiz/health-app" target="_blank" rel="noopener">GitHub</a>.</div>
   </div>
 </div>
 
@@ -243,8 +246,7 @@ input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;bac
 
       <div style="margin-top:1rem;text-align:center;">
         <button class="btn btn-m" style="width:100%;padding:14px;" onclick="showTab('ci',document.querySelectorAll('.tab')[1])">Start my check-in →</button>
-      </div>
-    </div>
+      </div>    </div>
   </div>
 
 </div>
