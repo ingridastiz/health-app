@@ -5,12 +5,15 @@
  *   Project Settings > Script Properties > propiedad "PASS"
  *
  * La hoja de calculo usa UNA sola pestana: "data".
- * Columnas: date | ihi | idi | overall | sleep | body | mood | presence |
- *           clarity | selfAcceptance | structure | growth | connection
+ * Columnas: date | bi | ri | overall |
+ *           connection | effort | joy | movement |
+ *           energy | selfAcceptance | healthRoutine | enthusiasm
  */
 
 var SHEET_NAME = 'data';
-var HEADERS = ['date','ihi','idi','overall','sleep','body','mood','presence','clarity','selfAcceptance','structure','growth','connection'];
+var HEADERS = ['date','bi','ri','overall','connection','effort','joy','movement','energy','selfAcceptance','healthRoutine','enthusiasm'];
+var NUM_VALUES = 8;
+var FIRST_VALUE_COL = 4; // indice 0-based de 'connection' en HEADERS
 
 function getPass_() {
   return PropertiesService.getScriptProperties().getProperty('PASS') || '';
@@ -29,11 +32,10 @@ function tz_() {
 function sheet_() {
   var ss = SpreadsheetApp.getActiveSpreadsheet();
   var sh = ss.getSheetByName(SHEET_NAME);
-  if (!sh) {
-    sh = ss.insertSheet(SHEET_NAME);
-    sh.appendRow(HEADERS);
-  }
-  if (sh.getLastRow() === 0) sh.appendRow(HEADERS);
+  if (!sh) sh = ss.insertSheet(SHEET_NAME);
+  // La fila 1 siempre con los encabezados vigentes, aunque la hoja tenga
+  // encabezados de una version anterior.
+  sh.getRange(1, 1, 1, HEADERS.length).setValues([HEADERS]);
   // La columna de fechas siempre como texto plano, para que Sheets no la
   // convierta en Date y se desfase por zona horaria.
   sh.getRange(2, 1, Math.max(sh.getMaxRows() - 1, 1), 1).setNumberFormat('@');
@@ -73,10 +75,10 @@ function readAll_() {
     if (!/^\d{4}-\d{2}-\d{2}$/.test(d)) continue;
     out.push({
       date: d,
-      ihi: Number(r[1]),
-      idi: Number(r[2]),
+      bi: Number(r[1]),
+      ri: Number(r[2]),
       overall: Number(r[3]),
-      values: r.slice(4, 13).map(Number)
+      values: r.slice(FIRST_VALUE_COL, FIRST_VALUE_COL + NUM_VALUES).map(Number)
     });
   }
   out.sort(function (a, b) { return a.date < b.date ? -1 : 1; });
@@ -86,9 +88,9 @@ function readAll_() {
 function saveEntry_(e) {
   var date = String(e.date || '').slice(0, 10);
   if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) throw new Error('bad date');
-  var values = (e.values || []).slice(0, 9).map(Number);
-  while (values.length < 9) values.push(0);
-  var row = [date, Number(e.ihi), Number(e.idi), Number(e.overall)].concat(values);
+  var values = (e.values || []).slice(0, NUM_VALUES).map(Number);
+  while (values.length < NUM_VALUES) values.push(0);
+  var row = [date, Number(e.bi), Number(e.ri), Number(e.overall)].concat(values);
 
   var sh = sheet_();
   var last = sh.getLastRow();
